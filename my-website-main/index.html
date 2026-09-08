@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ellreyyxml</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --hotpink:#ff2e88;
+  --orange:#ff6a00;
+  --yellow:#ffd400;
+  --cyan:#00e5ff;
+  --violet:#8b2fc9;
+  --wall:#0b0a10;
+  --card:#141019e6;
+  --line:rgba(255,255,255,0.08);
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+font-family:'Manrope',sans-serif;
+color:#f4f2fa;
+background:
+  radial-gradient(circle at 15% 10%, rgba(255,46,136,.18), transparent 40%),
+  radial-gradient(circle at 85% 25%, rgba(0,229,255,.14), transparent 42%),
+  radial-gradient(circle at 30% 80%, rgba(255,212,0,.10), transparent 45%),
+  radial-gradient(circle at 80% 90%, rgba(139,47,201,.18), transparent 45%),
+  var(--wall);
+overflow-x:hidden;
+position:relative;
+}
+
+/* concrete grain overlay */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+z-index:-1;
+pointer-events:none;
+opacity:.5;
+background-image:
+  repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, transparent 1px, transparent 2px),
+  repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, transparent 1px, transparent 3px);
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+pointer-events:none;
+}
+
+/* HEADER */
+.header{
+width:100%;
+aspect-ratio:16/9;
+background:url("https://files.catbox.moe/mv2i5r.jpg") center/cover no-repeat;
+position:relative;
+}
+
+.header::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(to bottom, rgba(255,46,136,.15), rgba(11,10,16,.95));
+mix-blend-mode:normal;
+}
+
+/* spray tag stripe on header */
+.header::before{
+content:"";
+position:absolute;
+left:0;right:0;bottom:0;
+height:6px;
+background:linear-gradient(90deg,var(--hotpink),var(--orange),var(--yellow),var(--cyan),var(--violet));
+z-index:2;
+}
+
+.container{
+margin-top:-70px;
+padding:0 20px 40px;
+max-width:520px;
+margin-left:auto;
+margin-right:auto;
+position:relative;
+}
+
+/* profile card */
+.profile-wrap{
+position:relative;
+}
+
+.profile-card{
+background:var(--card);
+backdrop-filter:blur(15px);
+border:1px solid var(--line);
+border-radius:18px;
+padding:74px 20px 26px;
+text-align:center;
+position:relative;
+box-shadow:0 10px 40px rgba(0,0,0,.55);
+overflow:hidden;
+}
+
+/* corner spray splat */
+.profile-card::after{
+content:"";
+position:absolute;
+width:180px;height:180px;
+right:-60px;top:-60px;
+background:radial-gradient(circle, rgba(255,106,0,.35), transparent 70%);
+filter:blur(6px);
+pointer-events:none;
+z-index:-1;
+}
+
+.avatar{
+width:112px;
+height:112px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid var(--wall);
+position:absolute;
+top:-56px;
+left:50%;
+transform:translateX(-50%);
+box-shadow:0 0 0 3px var(--hotpink), 0 0 25px rgba(255,46,136,.4);
+z-index:2;
+}
+
+/* name — graffiti tag */
+.name{
+font-family:'Bungee',cursive;
+font-size:26px;
+line-height:1.1;
+letter-spacing:.5px;
+background:linear-gradient(90deg,var(--hotpink),var(--orange),var(--yellow),var(--cyan),var(--violet),var(--hotpink));
+background-size:300% auto;
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+animation:tagShine 8s linear infinite;
+display:inline-block;
+position:relative;
+}
+
+@keyframes tagShine{
+0%{background-position:0% center;}
+100%{background-position:300% center;}
+}
+
+.verified{
+display:inline-flex;
+vertical-align:middle;
+margin-left:4px;
+}
+.verified svg{width:17px;height:17px;}
+
+/* handwritten tagline */
+.tag-label{
+font-family:'Permanent Marker',cursive;
+font-size:12px;
+color:var(--yellow);
+transform:rotate(-2deg);
+display:inline-block;
+margin-top:6px;
+opacity:.9;
+}
+
+.bio{
+margin-top:14px;
+font-size:13px;
+color:#cfc9de;
+line-height:1.6;
+}
+
+.music{
+margin-top:22px;
+background:rgba(255,255,255,0.04);
+padding:14px;
+border-radius:14px;
+border:1px solid var(--line);
+}
+
+.music iframe{
+width:100%;
+height:250px;
+border:none;
+border-radius:10px;
+}
+
+.typing{
+font-family:'JetBrains Mono';
+font-size:11.5px;
+margin-top:10px;
+opacity:.8;
+min-height:22px;
+color:var(--cyan);
+}
+
+/* section */
+.section{
+margin-top:56px;
+}
+
+.eyebrow{
+display:block;
+text-align:center;
+font-family:'Permanent Marker',cursive;
+font-size:14px;
+color:var(--hotpink);
+transform:rotate(-1.5deg);
+margin-bottom:8px;
+}
+
+.section-title{
+font-family:'Bungee',cursive;
+font-size:19px;
+letter-spacing:.3px;
+text-align:center;
+color:#fff;
+text-shadow:2px 2px 0 rgba(0,0,0,.4);
+}
+
+.section-title.c-orange{color:var(--orange);}
+.section-title.c-cyan{color:var(--cyan);}
+.section-title.c-yellow{color:var(--yellow);}
+.section-title.c-violet{color:#c98bff;}
+
+.section-desc{
+margin-top:12px;
+font-size:13px;
+color:#b9b3cc;
+text-align:center;
+max-width:340px;
+margin-left:auto;
+margin-right:auto;
+line-height:1.6;
+}
+
+/* contact */
+.contact{
+margin-top:25px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+.contact-item{
+display:flex;
+align-items:center;
+gap:12px;
+background:rgba(255,255,255,0.04);
+border:1px solid var(--line);
+border-left:3px solid var(--hotpink);
+padding:14px;
+border-radius:10px;
+transition:.25s;
+text-decoration:none;
+color:white;
+position:relative;
+overflow:hidden;
+cursor:pointer;
+}
+
+.contact-item:nth-child(2){border-left-color:var(--cyan);}
+.contact-item:nth-child(3){border-left-color:var(--yellow);}
+.contact-item:nth-child(4){border-left-color:var(--violet);}
+
+.contact-item:hover{
+transform:translateX(4px);
+background:rgba(255,255,255,0.07);
+}
+
+.contact-item:active{
+transform:scale(0.97);
+}
+
+.contact-item i{
+font-size:19px;
+color:var(--hotpink);
+width:22px;
+text-align:center;
+}
+.contact-item:nth-child(2) i{color:var(--cyan);}
+.contact-item:nth-child(3) i{color:var(--yellow);}
+.contact-item:nth-child(4) i{color:#c98bff;}
+
+.contact-item h4{
+font-size:14px;
+font-weight:700;
+}
+
+.contact-item p{
+font-size:12px;
+opacity:.65;
+margin-top:2px;
+}
+
+.contact-item .arrow{
+margin-left:auto;
+opacity:.35;
+font-size:12px;
+transition:.25s;
+}
+.contact-item:hover .arrow{opacity:1;transform:translateX(3px);}
+
+/* ===== SERVICES ===== */
+.services-grid{
+margin-top:25px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.service-card{
+background:rgba(255,255,255,0.03);
+border:1px solid var(--line);
+border-radius:14px;
+padding:20px 14px;
+text-align:left;
+transition:.25s;
+position:relative;
+}
+
+.service-card:nth-child(1){border-top:2px solid var(--hotpink);}
+.service-card:nth-child(2){border-top:2px solid var(--cyan);}
+.service-card:nth-child(3){border-top:2px solid var(--yellow);}
+.service-card:nth-child(4){border-top:2px solid var(--violet);}
+
+.service-card:hover{
+transform:translateY(-4px);
+background:rgba(255,255,255,0.06);
+}
+
+.service-card i{
+font-size:19px;
+margin-bottom:12px;
+display:block;
+}
+.service-card:nth-child(1) i{color:var(--hotpink);}
+.service-card:nth-child(2) i{color:var(--cyan);}
+.service-card:nth-child(3) i{color:var(--yellow);}
+.service-card:nth-child(4) i{color:#c98bff;}
+
+.service-card h4{
+font-family:'Bungee',cursive;
+font-size:12.5px;
+font-weight:400;
+margin-bottom:6px;
+letter-spacing:.2px;
+}
+
+.service-card p{
+font-size:11.5px;
+color:#b9b3cc;
+line-height:1.5;
+}
+
+/* ===== TERMINAL ===== */
+.terminal{
+margin-top:25px;
+background:#08070c;
+border:1px solid rgba(0,229,255,.25);
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 0 30px rgba(0,229,255,.08);
+}
+
+.terminal-bar{
+display:flex;
+align-items:center;
+gap:8px;
+padding:12px 14px;
+background:rgba(255,255,255,0.03);
+border-bottom:1px solid var(--line);
+}
+
+.terminal-bar span{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.terminal-bar .r{background:#ff5f57;}
+.terminal-bar .y{background:#febc2e;}
+.terminal-bar .g{background:#28c840;}
+.terminal-bar .label{margin-left:8px;font-family:'JetBrains Mono';font-size:11px;opacity:.5;}
+
+.terminal-body{
+padding:16px 18px 20px;
+font-family:'JetBrains Mono';
+font-size:12px;
+line-height:1.9;
+min-height:110px;
+white-space:pre-wrap;
+color:#c9f0ff;
+}
+
+.terminal-body .k{color:var(--cyan);}
+.terminal-body .s{color:#9dffb0;}
+.terminal-body .c{color:#7a7a8c;}
+
+.api-cta{margin-top:16px;display:flex;justify-content:center;}
+
+.api-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+background:linear-gradient(135deg,var(--cyan),#0891b2);
+color:#04121a;
+text-decoration:none;
+font-family:'Bungee',cursive;
+font-size:12px;
+letter-spacing:.3px;
+padding:14px 22px;
+border-radius:10px;
+box-shadow:0 8px 20px rgba(0,229,255,.2);
+transition:.25s;
+}
+.api-btn:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,229,255,.3);}
+
+/* ===== ALIGHT PRO CTA ===== */
+.promo-card{
+margin-top:25px;
+background:linear-gradient(160deg, rgba(139,47,201,.22), rgba(20,16,25,.9));
+border:1px solid rgba(200,139,255,.3);
+border-radius:16px;
+padding:26px 20px;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
+
+.promo-card::before{
+content:"";
+position:absolute;
+width:200px;height:200px;
+right:-70px;top:-70px;
+background:radial-gradient(circle, rgba(200,139,255,.35), transparent 70%);
+filter:blur(4px);
+pointer-events:none;
+}
+
+.promo-icon{
+width:46px;height:46px;
+margin:0 auto 14px;
+border-radius:12px;
+background:rgba(200,139,255,.15);
+border:1px solid rgba(200,139,255,.35);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:19px;
+color:#c98bff;
+}
+
+.promo-card h3{
+font-family:'Bungee',cursive;
+font-size:15px;
+color:#fff;
+letter-spacing:.2px;
+}
+
+.promo-card p{
+margin-top:8px;
+font-size:12.5px;
+color:#c9c3da;
+line-height:1.6;
+max-width:320px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.promo-btn{
+display:inline-flex;
+align-items:center;
+gap:9px;
+margin-top:18px;
+background:linear-gradient(135deg,var(--violet),var(--hotpink));
+color:#fff;
+text-decoration:none;
+font-family:'Bungee',cursive;
+font-size:12px;
+letter-spacing:.3px;
+padding:14px 24px;
+border-radius:10px;
+box-shadow:0 8px 22px rgba(139,47,201,.35);
+transition:.25s;
+}
+.promo-btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(139,47,201,.45);}
+.promo-btn:active{transform:scale(.97);}
+
+/* ===== STATS ===== */
+.stats{
+margin-top:25px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+text-align:center;
+}
+
+.stat{
+background:rgba(255,255,255,0.03);
+border:1px solid var(--line);
+border-radius:12px;
+padding:18px 8px;
+}
+
+.stat .num{
+font-family:'Bungee',cursive;
+font-size:18px;
+color:var(--yellow);
+}
+.stat:nth-child(2) .num{color:var(--hotpink);}
+.stat:nth-child(3) .num{color:var(--cyan);}
+
+.stat .lbl{
+font-size:10px;
+opacity:.55;
+margin-top:4px;
+letter-spacing:.5px;
+}
+
+/* ===== STACK ===== */
+.stack{
+margin-top:22px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.stack-chip{
+font-family:'JetBrains Mono';
+font-size:11px;
+padding:8px 14px;
+border-radius:20px;
+background:rgba(255,255,255,0.04);
+border:1px solid var(--line);
+opacity:.85;
+transition:.25s;
+}
+.stack-chip:hover{opacity:1;transform:translateY(-2px) rotate(-1deg);border-color:var(--hotpink);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* FOOTER */
+.footer{
+margin-top:60px;
+padding:30px 20px;
+text-align:center;
+border-top:1px solid var(--line);
+position:relative;
+}
+
+.footer::before{
+content:"";
+position:absolute;
+top:-1px;left:0;right:0;
+height:2px;
+background:linear-gradient(90deg,var(--hotpink),var(--orange),var(--yellow),var(--cyan),var(--violet));
+}
+
+.footer-logo{
+font-family:'Bungee',cursive;
+font-size:20px;
+letter-spacing:.5px;
+margin-bottom:12px;
+background:linear-gradient(90deg,var(--hotpink),var(--cyan));
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+}
+
+.footer-links{
+display:flex;
+justify-content:center;
+gap:15px;
+font-size:12px;
+opacity:.65;
+margin-bottom:12px;
+flex-wrap:wrap;
+}
+
+.footer-copy{font-size:11px;opacity:.55;margin-bottom:6px;}
+.footer-secure{font-size:11px;opacity:.4;}
+
+/* HAMBURGER */
+.menu-wrap{position:fixed;top:15px;right:15px;z-index:99999;}
+
+.hamburger{
+width:42px;height:42px;
+background:rgba(11,10,16,0.6);
+backdrop-filter:blur(10px);
+border:1px solid var(--line);
+border-radius:10px;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;
+transition:.25s;
+}
+.hamburger:hover{border-color:var(--hotpink);}
+.hamburger.active i::before{content:"\f00d";}
+
+.menu{
+display:none;
+opacity:0;
+transform:translateY(-8px);
+position:absolute;
+top:55px;right:0;
+width:250px;
+max-height:75vh;
+overflow-y:auto;
+background:#0f0d16f0;
+backdrop-filter:blur(15px);
+border:1px solid var(--line);
+border-top:2px solid var(--hotpink);
+border-radius:12px;
+box-shadow:0 15px 40px rgba(0,0,0,.55);
+transition:opacity .25s ease, transform .25s ease;
+}
+.menu.active{display:block;opacity:1;transform:translateY(0);}
+
+.menu-group-title{
+font-family:'Permanent Marker',cursive;
+font-size:11px;
+color:var(--yellow);
+padding:14px 14px 6px;
+opacity:.85;
+}
+
+.menu a{
+display:flex;align-items:center;gap:10px;
+padding:12px 14px;
+text-decoration:none;color:white;
+border-bottom:1px solid rgba(255,255,255,0.05);
+font-size:13px;
+transition:.2s;
+}
+.menu a:last-child{border-bottom:none;}
+.menu a:hover{background:rgba(255,255,255,0.05);padding-left:18px;}
+
+.menu a i{width:16px;text-align:center;color:var(--hotpink);font-size:14px;}
+.menu a.accent i{color:var(--cyan);}
+.menu a .txt{display:flex;flex-direction:column;}
+.menu a small{display:block;font-size:10.5px;opacity:.5;margin-top:2px;}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="rain"></canvas>
+
+<!-- HAMBURGER MENU -->
+<div class="menu-wrap">
+
+<div class="hamburger" id="hamburger" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</div>
+
+<div class="menu" id="menu">
+
+  <div class="menu-group-title">Downloader</div>
+
+  <a href="/downloader/spotify">
+    <i class="fa-brands fa-spotify"></i>
+    <div class="txt">Spotify<small>Download musik dari Spotify</small></div>
+  </a>
+
+  <a href="/downloader/tiktok">
+    <i class="fa-brands fa-tiktok"></i>
+    <div class="txt">TikTok<small>Download video tanpa watermark</small></div>
+  </a>
+
+  <div class="menu-group-title">Buat Developer</div>
+
+  <a href="/docs" class="accent">
+    <i class="fa-solid fa-code"></i>
+    <div class="txt">Dokumentasi API<small>Endpoint & cara pakai, gratis</small></div>
+  </a>
+
+  <div class="menu-group-title">Navigasi</div>
+
+  <a href="#layanan">
+    <i class="fa-solid fa-layer-group"></i>
+    <div class="txt">Layanan</div>
+  </a>
+
+  <a href="#kontak">
+    <i class="fa-solid fa-address-card"></i>
+    <div class="txt">Kontak</div>
+  </a>
+
+</div>
+
+</div>
+
+<div class="header"></div>
+
+<div class="container">
+
+<div class="profile-wrap">
+
+<img src="https://files.catbox.moe/v7xty4.jpg" class="avatar">
+
+<div class="profile-card">
+
+<div class="name">
+ellreyyxml
+<span class="verified">
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="10" fill="#00e5ff"/>
+<path d="M8 12l2.5 2.5L16 9" fill="none" stroke="#0b0a10" stroke-width="2"/>
+</svg>
+</span>
+</div>
+<div class="tag-label">est. di garasi, bukan di startup</div>
+
+<div class="bio">
+Ngoding bukan sulap. Yang keliatan gampang di layar itu hasil dari banyak error yang gak ditunjukin ke orang.
+</div>
+
+<div class="music">
+<iframe src="https://open.spotify.com/embed/playlist/5QLuGm1kdVwKAJzRxHqWID"></iframe>
+<div class="typing" id="typing"></div>
+</div>
+
+</div>
+
+<div class="section reveal">
+<div class="section-title">Bukan portfolio template</div>
+<div class="section-desc">
+Halaman ini tempat gue naro kerjaan, kontak, sama beberapa tools yang bebas dipake siapa aja.
+</div>
+</div>
+
+<div class="contact" id="kontak">
+
+<a href="https://whatsapp.com/channel/0029VbCRGqnJ93wSMD9off1A" class="contact-item">
+<i class="fab fa-whatsapp"></i>
+<div>
+<h4>Channel WhatsApp</h4>
+<p>Update, drop, dan info random gue</p>
+</div>
+<i class="fa-solid fa-chevron-right arrow"></i>
+</a>
+
+<a href="https://wa.me/6289679458824" class="contact-item">
+<i class="fab fa-whatsapp"></i>
+<div>
+<h4>Chat Langsung</h4>
+<p>Kalo mau ngobrol atau kerja bareng</p>
+</div>
+<i class="fa-solid fa-chevron-right arrow"></i>
+</a>
+
+<div class="contact-item">
+<i class="fab fa-telegram"></i>
+<div>
+<h4>Telegram</h4>
+<p>Lebih santai buat obrolan cepat</p>
+</div>
+<i class="fa-solid fa-chevron-right arrow"></i>
+</div>
+
+<a href="/docs" class="contact-item">
+<i class="fa-solid fa-book"></i>
+<div>
+<h4>Dokumentasi API</h4>
+<p>Endpoint lengkap, gak pake API key</p>
+</div>
+<i class="fa-solid fa-chevron-right arrow"></i>
+</a>
+
+</div>
+
+<!-- ALIGHT MOTION PRO CTA -->
+<div class="promo-card reveal">
+<div class="promo-icon"><i class="fa-solid fa-crown"></i></div>
+<h3>Alight Motion Pro</h3>
+<p>Premiumkan akun Alight Motion kamu secara gratis dan mudah, tanpa ribet.</p>
+<a href="/alightprem" class="promo-btn">
+<i class="fa-solid fa-bolt"></i>
+GAS SEKARANG
+</a>
+</div>
+
+<!-- LAYANAN -->
+<div class="section reveal" id="layanan">
+<span class="eyebrow">apa yang gue kerjain</span>
+<div class="section-title c-orange">Layanan</div>
+<div class="services-grid">
+
+<div class="service-card">
+<i class="fa-solid fa-code"></i>
+<h4>Web Dev</h4>
+<p>Website dari nol, ringan, gak pake bloat yang gak perlu.</p>
+</div>
+
+<div class="service-card">
+<i class="fa-solid fa-palette"></i>
+<h4>UI Design</h4>
+<p>Tampilan yang enak diliat dan gampang dipake, bukan cuma cantik doang.</p>
+</div>
+
+<div class="service-card">
+<i class="fa-solid fa-gears"></i>
+<h4>Automation</h4>
+<p>Kerjaan berulang yang bikin bosen, gue otomatisin.</p>
+</div>
+
+<div class="service-card">
+<i class="fa-solid fa-wrench"></i>
+<h4>Maintenance</h4>
+<p>Sistem yang udah jalan, gue jagain biar tetep jalan.</p>
+</div>
+
+</div>
+</div>
+
+<!-- API TERMINAL -->
+<div class="section reveal">
+<span class="eyebrow">buat yang suka ngoprek</span>
+<div class="section-title c-cyan">API Publik</div>
+<div class="section-desc">
+Beberapa tools di atas bisa diakses lewat API. Gratis, gak pake API key, gas langsung.
+</div>
+
+<div class="terminal">
+<div class="terminal-bar">
+<span class="r"></span><span class="y"></span><span class="g"></span>
+<span class="label">request.sh</span>
+</div>
+<div class="terminal-body" id="termBody"></div>
+</div>
+
+<div class="api-cta">
+<a href="/docs" class="api-btn">
+<i class="fa-solid fa-book-open"></i>
+LIAT DOKUMENTASI
+</a>
+</div>
+</div>
+
+<!-- STATS -->
+<div class="section reveal">
+<div class="stats">
+<div class="stat"><div class="num">99.9%</div><div class="lbl">UPTIME</div></div>
+<div class="stat"><div class="num">GRATIS</div><div class="lbl">TANPA APIKEY</div></div>
+<div class="stat"><div class="num">24/7</div><div class="lbl">NYALA TERUS</div></div>
+</div>
+</div>
+
+<!-- STACK -->
+<div class="section reveal">
+<span class="eyebrow">tools sehari-hari</span>
+<div class="section-title c-yellow">Yang Gue Pake</div>
+<div class="stack">
+<span class="stack-chip">Node.js</span>
+<span class="stack-chip">REST API</span>
+<span class="stack-chip">HTML/CSS</span>
+<span class="stack-chip">Webhook</span>
+<span class="stack-chip">JSON</span>
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+
+<div class="footer-logo">ellreyyxml</div>
+
+<div class="footer-links">
+<span>Privacy Policy</span>
+<span>Terms of Service</span>
+<span>Contact</span>
+<span>Support</span>
+<a href="/docs" style="color:inherit;text-decoration:none;">API Docs</a>
+</div>
+
+<div class="footer-copy">© 2026 ellreyyxml. All rights reserved.</div>
+<div class="footer-secure">Koneksi aman, gak nyimpen data lo sembarangan.</div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active")
+document.getElementById("hamburger").classList.toggle("active")
+}
+
+document.addEventListener("click",function(e){
+const wrap=document.querySelector(".menu-wrap")
+if(!wrap.contains(e.target)){
+document.getElementById("menu").classList.remove("active")
+document.getElementById("hamburger").classList.remove("active")
+}
+})
+
+/* colorful spray drops instead of plain pink rain */
+const canvas=document.getElementById("rain")
+const ctx=canvas.getContext("2d")
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+window.addEventListener("resize",()=>{
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+})
+
+const palette=["#ff2e88","#ff6a00","#ffd400","#00e5ff","#8b2fc9"]
+
+let drops=[]
+for(let i=0;i<90;i++){
+drops.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2+0.5,
+d:Math.random()*1.2+0.3,
+c:palette[Math.floor(Math.random()*palette.length)]
+})
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height)
+drops.forEach(d=>{
+ctx.beginPath()
+ctx.fillStyle=d.c
+ctx.globalAlpha=0.35
+ctx.arc(d.x,d.y,d.r,0,Math.PI*2)
+ctx.fill()
+})
+ctx.globalAlpha=1
+drops.forEach(d=>{
+d.y+=d.d
+if(d.y>canvas.height){
+d.y=0
+d.x=Math.random()*canvas.width
+}
+})
+}
+setInterval(draw,30)
+
+/* typing bio */
+const text="masih belajar. kalo ada yang salah di sini, itu berarti gue lagi eksperimen."
+let i=0
+let el=document.getElementById("typing")
+
+function type(){
+if(i<text.length){
+el.innerHTML+=text.charAt(i)
+i++
+setTimeout(type,40)
+}else{
+setTimeout(erase,5000)
+}
+}
+function erase(){
+if(i>0){
+el.innerHTML=text.substring(0,i-1)
+i--
+setTimeout(erase,20)
+}else{
+setTimeout(type,800)
+}
+}
+type()
+
+/* typing terminal */
+const termLines=[
+{txt:"curl -X GET ", cls:""},
+{txt:"/api/tiktok?url=...", cls:"k"},
+{txt:"\n\n", cls:""},
+{txt:"# response", cls:"c"},
+{txt:'\n{ "status": 200, "result": "ok" }', cls:"s"}
+]
+
+const termEl=document.getElementById("termBody")
+let li=0, ci=0
+
+function typeTerm(){
+if(li>=termLines.length) return
+const line=termLines[li]
+if(ci===0){
+const span=document.createElement("span")
+span.className=line.cls
+span.dataset.idx=li
+termEl.appendChild(span)
+}
+const span=termEl.querySelector('span[data-idx="'+li+'"]')
+if(ci<line.txt.length){
+span.textContent+=line.txt.charAt(ci)
+ci++
+setTimeout(typeTerm,18)
+}else{
+li++
+ci=0
+setTimeout(typeTerm,60)
+}
+}
+
+const reveals=document.querySelectorAll(".reveal")
+const io=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+io.unobserve(entry.target)
+}
+})
+},{threshold:0.15})
+reveals.forEach(r=>io.observe(r))
+
+const termObserver=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+typeTerm()
+termObserver.disconnect()
+}
+})
+},{threshold:0.3})
+termObserver.observe(document.querySelector(".terminal"))
+
+</script>
+
+</body>
+</html>
