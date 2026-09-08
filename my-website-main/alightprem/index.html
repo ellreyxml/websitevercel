@@ -1,0 +1,2948 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AM Verification">
+  <meta property="og:title" content="AM Verification">
+  <meta property="og:description" content="Verifikasi akun kamu tanpa ribet — gratis, cepat, dan tanpa syarat tambahan.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>AM Verification</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --ink: #0a0a0a;
+      --paper: #f2f1ec;
+      --cyan: #25f4ee;
+      --pink: #fe2c55;
+      --gray: #7a7a76;
+      --line: rgba(242,241,236,0.12);
+      --panel: #111111;
+      --green: #00ff66;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Space Mono', monospace;
+      color: var(--paper);
+      background: var(--ink);
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 34px 34px;
+      overflow-x: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    .spotlight {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          600px circle at var(--mx,50%) var(--my,20%),
+          rgba(37,244,238,.06),
+          transparent 40%
+        );
+      transition: background .1s ease-out;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg,var(--cyan),var(--pink));
+      z-index: 10000;
+      transition: width .1s linear;
+    }
+
+    /* =========================
+       TOPBAR
+    ========================= */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      background: rgba(10,10,10,.72);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition:
+        color .2s,
+        border-color .2s,
+        box-shadow .2s;
+    }
+
+    .back-link i {
+      color: var(--cyan);
+    }
+
+    .back-link:hover {
+      color: var(--paper);
+      border-color: var(--pink);
+      box-shadow: 0 0 18px rgba(254,44,85,.2);
+    }
+
+    .back-link:active {
+      transform: scale(.97);
+    }
+
+    /* =========================
+       FAB
+    ========================= */
+
+    .fab-back {
+      position: fixed;
+      left: 18px;
+      bottom: 22px;
+      z-index: 200;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--ink);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(37,244,238,.15),
+        0 10px 24px rgba(0,0,0,.5);
+      transition:
+        box-shadow .25s,
+        transform .2s,
+        color .2s;
+    }
+
+    .fab-back:hover {
+      color: var(--ink);
+      background: var(--cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 26px rgba(37,244,238,.4);
+    }
+
+    .fab-back:active {
+      transform: scale(.92);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      margin: auto;
+      padding: 60px 20px 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--gray);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .badge i {
+      color: var(--cyan);
+    }
+
+    h1 {
+      position: relative;
+      display: inline-block;
+      margin: 25px 0 14px;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(32px, 8vw, 52px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    h1 span {
+      position: relative;
+      display: inline-block;
+      color: var(--paper);
+    }
+
+    h1 span::before,
+    h1 span::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: -1;
+      animation: glitchShift 4s ease-in-out infinite;
+    }
+
+    h1 span::before {
+      color: var(--cyan);
+      transform: translate(3px,2px);
+      opacity: .8;
+    }
+
+    h1 span::after {
+      color: var(--pink);
+      transform: translate(-3px,-2px);
+      opacity: .8;
+      animation-delay: -2s;
+    }
+
+    @keyframes glitchShift {
+      0%,100% {
+        transform: translate(3px,2px);
+      }
+
+      50% {
+        transform: translate(-2px,3px);
+      }
+    }
+
+    .subtitle {
+      max-width: 480px;
+      margin: 0 auto 32px;
+      color: var(--gray);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 0 0 8px;
+      color: var(--gray);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .field {
+      max-width: 480px;
+      margin: 0 auto 16px;
+      text-align: left;
+    }
+
+    .input-wrapper {
+      display: flex;
+      width: 100%;
+      padding: 7px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      position: relative;
+      isolation: isolate;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(37,244,238,.2);
+    }
+
+    .input-wrapper::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      background:
+        conic-gradient(
+          from var(--angle,0deg),
+          transparent 0 65%,
+          var(--cyan),
+          var(--pink),
+          transparent 85% 100%
+        );
+      animation: spin 6s linear infinite;
+      opacity: .5;
+    }
+
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes spin {
+      from {
+        --angle: 0deg;
+      }
+
+      to {
+        --angle: 360deg;
+      }
+    }
+
+    .input-wrapper input,
+    .input-wrapper textarea {
+      flex: 1;
+      min-width: 0;
+      padding: 15px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      resize: vertical;
+    }
+
+    .input-wrapper textarea {
+      min-height: 90px;
+    }
+
+    .input-wrapper input::placeholder,
+    .input-wrapper textarea::placeholder {
+      color: var(--gray);
+    }
+
+    .input-wrapper button {
+      min-width: 110px;
+      padding: 0 20px;
+      border: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      transition:
+        background .15s ease,
+        box-shadow .25s ease,
+        transform .1s ease;
+      align-self: stretch;
+    }
+
+    .field.textarea-field .input-wrapper {
+      flex-direction: column;
+    }
+
+    .field.textarea-field .input-wrapper button {
+      margin-top: 7px;
+      padding: 13px;
+    }
+
+    .input-wrapper button:hover {
+      background: var(--cyan);
+      box-shadow: 0 0 24px rgba(37,244,238,.45);
+    }
+
+    .input-wrapper button:active {
+      transform: scale(.97);
+    }
+
+    .input-wrapper button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      color: var(--gray);
+      font-size: 12px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--line);
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin-loader .8s linear infinite;
+    }
+
+    @keyframes spin-loader {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .status {
+      max-width: 480px;
+      margin: 16px auto 0;
+      text-align: center;
+      color: var(--cyan);
+      font-size: 12.5px;
+      min-height: 18px;
+    }
+
+    /* =========================
+       BASIC RESPONSE
+    ========================= */
+
+    .basic-response {
+      max-width: 480px;
+      margin: 18px auto 0;
+      padding: 15px;
+      text-align: left;
+      background: #050505;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--cyan);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #0f0;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* =========================
+       MARQUEE
+    ========================= */
+
+    .marquee {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      margin: 32px 0;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 14px;
+      font-size: 12px;
+      letter-spacing: .1em;
+      color: var(--gray);
+      animation: marquee 18s linear infinite;
+    }
+
+    .marquee-track span:nth-child(3n+2) {
+      color: var(--cyan);
+    }
+
+    .marquee-track span:nth-child(3n+3) {
+      color: var(--pink);
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* =========================
+       API DOCUMENTATION
+    ========================= */
+
+    .api-section {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 65px 20px;
+      border-top: 1px solid var(--line);
+      position: relative;
+      z-index: 2;
+    }
+
+    .api-header {
+      margin-bottom: 30px;
+    }
+
+    .api-eyebrow {
+      color: var(--cyan);
+      font-size: 11px;
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+    }
+
+    .api-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(25px,5vw,42px);
+      margin-bottom: 12px;
+    }
+
+    .api-description {
+      max-width: 650px;
+      color: var(--gray);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .api-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 16px;
+    }
+
+    .api-card {
+      border: 1px solid var(--line);
+      background: rgba(17,17,17,.8);
+      padding: 20px;
+      transition:
+        border-color .2s,
+        transform .2s,
+        box-shadow .25s;
+    }
+
+    .api-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(37,244,238,.08);
+    }
+
+    .api-method {
+      display: inline-block;
+      padding: 4px 8px;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .api-method.verify {
+      color: var(--pink);
+      border-color: var(--pink);
+    }
+
+    .api-endpoint {
+      font-size: 13px;
+      word-break: break-all;
+      color: var(--paper);
+      margin-bottom: 12px;
+    }
+
+    .api-card p {
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .api-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .api-button {
+      border: 1px solid var(--line);
+      background: #050505;
+      color: var(--paper);
+      padding: 9px 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition:
+        background .2s,
+        border-color .2s,
+        color .2s;
+    }
+
+    .api-button:hover {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: var(--ink);
+    }
+
+    .api-button.secondary:hover {
+      background: var(--pink);
+      border-color: var(--pink);
+    }
+
+    /* =========================
+       TRY API
+    ========================= */
+
+    .try-panel {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      background: #0d0d0d;
+      padding: 20px;
+    }
+
+    .try-panel.hidden-panel {
+      display: none;
+    }
+
+    .try-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .try-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 18px;
+    }
+
+    .close-try {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--gray);
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+    }
+
+    .close-try:hover {
+      color: var(--pink);
+      border-color: var(--pink);
+    }
+
+    .try-fields {
+      display: grid;
+      gap: 12px;
+    }
+
+    .try-fields input,
+    .try-fields textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      outline: none;
+      background: #050505;
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .try-fields textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .try-fields input:focus,
+    .try-fields textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(37,244,238,.2);
+    }
+
+    .try-send {
+      margin-top: 12px;
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .try-send:hover {
+      background: var(--cyan);
+    }
+
+    .try-send:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    /* =========================
+       REQUEST SH
+    ========================= */
+
+    .request-box {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      background: #050505;
+    }
+
+    .request-head {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .request-head span {
+      font-size: 11px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .copy-request {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--cyan);
+      padding: 5px 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .copy-request:hover {
+      background: var(--cyan);
+      color: var(--ink);
+    }
+
+    .request-code {
+      margin: 0;
+      padding: 15px;
+      color: #0f0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       LIVE LOG
+    ========================= */
+
+    .live-section {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 20px 65px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .live-panel {
+      border: 1px solid var(--line);
+      background: #080808;
+    }
+
+    .live-header {
+      padding: 15px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .live-heading {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(0,255,102,.6);
+      animation: livePulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes livePulse {
+      0%,100% {
+        opacity: .4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .clear-log {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--gray);
+      padding: 7px 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .clear-log:hover {
+      color: var(--pink);
+      border-color: var(--pink);
+    }
+
+    .live-body {
+      max-height: 560px;
+      overflow-y: auto;
+    }
+
+    .empty-log {
+      padding: 35px 20px;
+      text-align: center;
+      color: var(--gray);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .log-item {
+      padding: 18px;
+      border-bottom: 1px solid rgba(242,241,236,.07);
+    }
+
+    .log-item:last-child {
+      border-bottom: 0;
+    }
+
+    .log-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .log-method {
+      font-size: 10px;
+      color: var(--cyan);
+      border: 1px solid rgba(37,244,238,.35);
+      padding: 4px 7px;
+    }
+
+    .log-time {
+      font-size: 10px;
+      color: var(--gray);
+    }
+
+    .log-url {
+      color: var(--paper);
+      font-size: 11px;
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+
+    .log-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .log-block {
+      min-width: 0;
+      border: 1px solid rgba(242,241,236,.08);
+      background: #030303;
+    }
+
+    .log-label {
+      padding: 7px 9px;
+      border-bottom: 1px solid rgba(242,241,236,.08);
+      color: var(--gray);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .log-code {
+      margin: 0;
+      padding: 10px;
+      color: #0f0;
+      font-size: 10px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    /* =========================
+       CONTENT SECTIONS
+    ========================= */
+
+    .section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 56px 24px;
+      border-top: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .section::before {
+      content: attr(data-num);
+      position: absolute;
+      top: 20px;
+      right: 10px;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(80px,16vw,150px);
+      color: transparent;
+      -webkit-text-stroke: 1px var(--line);
+      line-height: 1;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .eyebrow,
+    .sec-title,
+    .steps,
+    .grid,
+    .faq {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+
+    .sec-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(22px,4vw,30px);
+      margin-bottom: 32px;
+      max-width: 440px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .step {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition:
+        opacity .7s ease,
+        transform .7s ease;
+    }
+
+    .step:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    .step:nth-child(2) {
+      transition-delay: .12s;
+    }
+
+    .step:nth-child(3) {
+      transition-delay: .24s;
+    }
+
+    .step-no {
+      font-size: 13px;
+      color: var(--pink);
+      border: 1px solid var(--line);
+      padding: 4px 8px;
+      flex-shrink: 0;
+      transition:
+        box-shadow .25s,
+        border-color .25s;
+    }
+
+    .step:hover .step-no {
+      border-color: var(--pink);
+      box-shadow: 0 0 16px rgba(254,44,85,.35);
+    }
+
+    .step h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: #cfcfc9;
+      line-height: 1.5;
+      max-width: 400px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .feat {
+      border: 1px solid var(--line);
+      padding: 18px;
+      transition:
+        opacity .7s ease,
+        transform .3s ease,
+        border-color .2s,
+        box-shadow .25s;
+    }
+
+    .feat:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    .feat:nth-child(2) {
+      transition-delay: .1s;
+    }
+
+    .feat:nth-child(3) {
+      transition-delay: .2s;
+    }
+
+    .feat:nth-child(4) {
+      transition-delay: .3s;
+    }
+
+    .feat:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 26px rgba(37,244,238,.15);
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .feat i {
+      color: var(--cyan);
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feat h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .feat p {
+      font-size: 12px;
+      color: #a5a5a0;
+      line-height: 1.5;
+    }
+
+    .faq {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .faq details {
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+      transition:
+        border-color .2s,
+        box-shadow .25s;
+    }
+
+    .faq details:hover {
+      border-color: var(--pink);
+      box-shadow: 0 0 20px rgba(254,44,85,.12);
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-size: 13px;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary::after {
+      content: "+";
+      color: var(--pink);
+      font-size: 16px;
+    }
+
+    .faq details[open] summary::after {
+      content: "–";
+    }
+
+    .faq p {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #cfcfc9;
+      line-height: 1.5;
+    }
+
+    footer {
+      margin-top: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--gray);
+      font-size: 11px;
+      line-height: 1.6;
+      letter-spacing: .03em;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================
+       RIPPLE / REVEAL
+    ========================= */
+
+    .ripple {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(10,10,10,.35);
+      transform: translate(-50%,-50%) scale(0);
+      animation: rippleAnim .6s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: translate(-50%,-50%) scale(22);
+        opacity: 0;
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity .7s ease,
+        transform .7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 700px) {
+      .api-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .log-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .field.textarea-field .input-wrapper {
+        flex-direction: column;
+      }
+
+      .input-wrapper:not(.textarea-field .input-wrapper) {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .input-wrapper button {
+        min-height: 48px;
+      }
+
+      .try-top {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="spotlight" id="spotlight"></div>
+  <div class="progress" id="progress"></div>
+
+  <div class="topbar">
+    <a href="/" class="back-link" onclick="goBack(event)">
+      <i class="fa-solid fa-arrow-left"></i>
+      Kembali
+    </a>
+  </div>
+
+  <button
+    class="fab-back"
+    onclick="goBack(event)"
+    title="Kembali"
+    aria-label="Kembali"
+  >
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>
+
+  <!-- =========================
+       VERIFICATION
+  ========================== -->
+
+  <main class="container">
+
+    <section class="hero">
+
+      <div class="badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        AM Verification
+      </div>
+
+      <h1>
+        Verifikasi Akun
+        <br>
+        <span data-text="Tanpa Ribet">Tanpa Ribet</span>
+      </h1>
+
+      <p class="subtitle">
+        Kirim link verifikasi ke email kamu, tempel link-nya di sini,
+        dan akun langsung aktif. Gratis, gak ada syarat tambahan.
+      </p>
+
+      <div class="field">
+        <label>Email</label>
+
+        <div class="input-wrapper">
+          <input
+            id="email"
+            type="email"
+            placeholder="user@example.com"
+            autocomplete="off"
+            required
+          >
+
+          <button id="sendBtn" onclick="sendVerification()">
+            <i class="fa-solid fa-paper-plane"></i>
+            Send
+          </button>
+        </div>
+      </div>
+
+      <div class="field textarea-field">
+        <label>Magic Link</label>
+
+        <div class="input-wrapper">
+
+          <textarea
+            id="magicLink"
+            placeholder="Paste magic link dari email di sini..."
+          ></textarea>
+
+          <button id="verifyBtn" onclick="verifyAccount()">
+            <i class="fa-solid fa-check"></i>
+            Verify
+          </button>
+
+        </div>
+      </div>
+
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <span>Memproses...</span>
+      </div>
+
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+
+      <pre
+        id="result"
+        class="basic-response"
+      >Response akan muncul di sini...</pre>
+
+      <div class="marquee">
+        <div class="marquee-track">
+          <span>GRATIS</span>
+          <span>·</span>
+          <span>TANPA RIBET</span>
+          <span>·</span>
+          <span>CEPAT</span>
+          <span>·</span>
+          <span>GRATIS</span>
+          <span>·</span>
+          <span>TANPA RIBET</span>
+          <span>·</span>
+          <span>CEPAT</span>
+          <span>·</span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================
+       API DOCUMENTATION
+  ========================== -->
+
+  <section class="api-section" id="api">
+
+    <div class="api-header">
+
+      <div class="api-eyebrow">
+        API / DOCUMENTATION
+      </div>
+
+      <h2 class="api-title">
+        Public API
+      </h2>
+
+      <p class="api-description">
+        Endpoint API tersedia untuk integrasi aplikasi.
+        Kamu bisa melihat format request, mencoba endpoint secara langsung,
+        dan melihat response yang dikembalikan secara realtime.
+      </p>
+
+    </div>
+
+    <div class="api-grid">
+
+      <!-- SEND -->
+
+      <article class="api-card">
+
+        <span class="api-method">
+          GET
+        </span>
+
+        <div class="api-endpoint">
+          /alight-motion/send
+        </div>
+
+        <p>
+          Mengirim link verifikasi ke alamat email yang diberikan.
+        </p>
+
+        <div class="api-actions">
+
+          <button
+            class="api-button"
+            onclick="openTry('send')"
+          >
+            <i class="fa-solid fa-play"></i>
+            Coba Langsung
+          </button>
+
+          <button
+            class="api-button secondary"
+            onclick="showRequest('send')"
+          >
+            <i class="fa-solid fa-terminal"></i>
+            request.sh
+          </button>
+
+        </div>
+
+      </article>
+
+      <!-- VERIFY -->
+
+      <article class="api-card">
+
+        <span class="api-method verify">
+          GET
+        </span>
+
+        <div class="api-endpoint">
+          /alight-motion/verify
+        </div>
+
+        <p>
+          Memproses magic link untuk melakukan verifikasi akun.
+        </p>
+
+        <div class="api-actions">
+
+          <button
+            class="api-button"
+            onclick="openTry('verify')"
+          >
+            <i class="fa-solid fa-play"></i>
+            Coba Langsung
+          </button>
+
+          <button
+            class="api-button secondary"
+            onclick="showRequest('verify')"
+          >
+            <i class="fa-solid fa-terminal"></i>
+            request.sh
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- TRY PANEL -->
+
+    <div
+      id="tryPanel"
+      class="try-panel hidden-panel"
+    >
+
+      <div class="try-top">
+
+        <div class="try-title">
+          <span id="tryTitle">
+            Coba API
+          </span>
+        </div>
+
+        <button
+          class="close-try"
+          onclick="closeTry()"
+          aria-label="Tutup"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <div class="try-fields">
+
+        <input
+          id="apiEmail"
+          type="email"
+          placeholder="Email"
+        >
+
+        <textarea
+          id="apiLink"
+          placeholder="Magic link"
+        ></textarea>
+
+      </div>
+
+      <button
+        id="trySendBtn"
+        class="try-send"
+        onclick="executePublicApi()"
+      >
+        <i class="fa-solid fa-paper-plane"></i>
+        Kirim Request
+      </button>
+
+      <div
+        id="tryStatus"
+        class="status"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <div class="request-box">
+
+        <div class="request-head">
+
+          <span>
+            request.sh
+          </span>
+
+          <button
+            class="copy-request"
+            onclick="copyRequest()"
+          >
+            <i class="fa-solid fa-copy"></i>
+            Copy
+          </button>
+
+        </div>
+
+        <pre
+          id="requestCode"
+          class="request-code"
+        >Pilih endpoint terlebih dahulu.</pre>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       LIVE REQUEST / RESPONSE
+  ========================== -->
+
+  <section class="live-section">
+
+    <div class="live-panel">
+
+      <div class="live-header">
+
+        <div class="live-heading">
+          <span class="live-dot"></span>
+          LIVE REQUEST / RESPONSE
+        </div>
+
+        <button
+          class="clear-log"
+          onclick="clearLogs()"
+        >
+          <i class="fa-solid fa-trash"></i>
+          Clear
+        </button>
+
+      </div>
+
+      <div
+        id="liveBody"
+        class="live-body"
+      >
+
+        <div
+          id="emptyLog"
+          class="empty-log"
+        >
+          Belum ada request publik.<br>
+          Gunakan tombol "Coba Langsung" untuk mengirim request.
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       HOW TO
+  ========================== -->
+
+  <section
+    class="section reveal"
+    data-num="01"
+  >
+
+    <p class="eyebrow">
+      01 / CARA PAKAI
+    </p>
+
+    <h2 class="sec-title">
+      Tiga langkah, selesai.
+    </h2>
+
+    <div class="steps">
+
+      <div class="step reveal">
+
+        <span class="step-no">
+          01
+        </span>
+
+        <div>
+
+          <h3>
+            Kirim link
+          </h3>
+
+          <p>
+            Masukin email kamu, lalu klik Send.
+            Link verifikasi langsung dikirim ke inbox.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="step reveal">
+
+        <span class="step-no">
+          02
+        </span>
+
+        <div>
+
+          <h3>
+            Cek email
+          </h3>
+
+          <p>
+            Buka inbox kamu. Kalau gak ketemu,
+            cek folder Spam atau Promotions.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="step reveal">
+
+        <span class="step-no">
+          03
+        </span>
+
+        <div>
+
+          <h3>
+            Tempel & verify
+          </h3>
+
+          <p>
+            Copy seluruh magic link dari email,
+            paste di kolom di atas, lalu klik Verify.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       FEATURES
+  ========================== -->
+
+  <section
+    class="section reveal"
+    data-num="02"
+  >
+
+    <p class="eyebrow">
+      02 / KENAPA PAKAI INI
+    </p>
+
+    <h2 class="sec-title">
+      Simpel dari awal sampai akhir.
+    </h2>
+
+    <div class="grid">
+
+      <div class="feat reveal">
+        <i class="fa-solid fa-bolt"></i>
+
+        <h3>
+          Cepat
+        </h3>
+
+        <p>
+          Gak perlu install apa-apa,
+          langsung jalan dari browser.
+        </p>
+      </div>
+
+      <div class="feat reveal">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+
+        <h3>
+          Gratis
+        </h3>
+
+        <p>
+          Gak ada biaya tersembunyi
+          dan gak ada batasan pemakaian.
+        </p>
+      </div>
+
+      <div class="feat reveal">
+        <i class="fa-solid fa-ban"></i>
+
+        <h3>
+          Tanpa iklan
+        </h3>
+
+        <p>
+          Fokus ke satu hal doang:
+          bantu akun kamu terverifikasi.
+        </p>
+      </div>
+
+      <div class="feat reveal">
+        <i class="fa-solid fa-lock"></i>
+
+        <h3>
+          Privasi terjaga
+        </h3>
+
+        <p>
+          Data yang kamu masukin cuma dipakai
+          buat proses ini.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       FAQ
+  ========================== -->
+
+  <section
+    class="section reveal"
+    data-num="03"
+  >
+
+    <p class="eyebrow">
+      03 / FAQ
+    </p>
+
+    <h2 class="sec-title">
+      Pertanyaan umum.
+    </h2>
+
+    <div class="faq">
+
+      <details>
+        <summary>
+          Apakah ini gratis?
+        </summary>
+
+        <p>
+          Ya, sepenuhnya gratis,
+          gak ada biaya tersembunyi.
+        </p>
+      </details>
+
+      <details>
+        <summary>
+          Kenapa email verifikasinya belum masuk?
+        </summary>
+
+        <p>
+          Tunggu 1–2 menit, lalu cek folder Spam,
+          Promotions, atau Junk. Kalau pakai email
+          kampus/kantor, coba email pribadi seperti
+          Gmail atau Outlook.
+        </p>
+      </details>
+
+      <details>
+        <summary>
+          Magic link itu apa?
+        </summary>
+
+        <p>
+          Link unik yang dikirim ke email kamu
+          untuk membuktikan bahwa email tersebut
+          memang punya kamu.
+        </p>
+      </details>
+
+      <details>
+        <summary>
+          Amankah pakai tool ini?
+        </summary>
+
+        <p>
+          Gunakan hanya untuk akun kamu sendiri
+          dan jangan pernah membagikan magic link
+          kepada orang lain.
+        </p>
+      </details>
+
+    </div>
+
+  </section>
+
+  <footer>
+
+    Gunakan cuma untuk verifikasi akun kamu sendiri.
+    <br>
+    Jangan share magic link ke orang lain.
+
+  </footer>
+
+  <script>
+
+    /* =========================================================
+       IMPORTANT
+       =========================================================
+
+       Endpoint website disimpan hanya sebagai konfigurasi
+       internal aplikasi dan tidak pernah dirender sebagai
+       URL publik, request.sh, live log, maupun dokumentasi.
+
+       Endpoint dokumentasi publik hanya:
+       /alight-motion/send
+       /alight-motion/verify
+    ========================================================= */
+
+    function goBack(e) {
+
+      if (e) {
+        e.preventDefault();
+      }
+
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+
+    /* =========================================================
+       INTERNAL WEBSITE REQUEST
+       ========================================================= */
+
+    const PRIVATE_SEND_PATH = [
+      "/api",
+      "/amsend"
+    ].join("");
+
+    const PRIVATE_VERIFY_PATH = [
+      "/api",
+      "/amverify"
+    ].join("");
+
+    const WEBSITE_ORIGIN = "https://ellreyxml.web.id";
+
+    function showResult(data) {
+
+      document.getElementById("result").textContent =
+        JSON.stringify(sanitizeObject(data), null, 2);
+
+    }
+
+    /* =========================================================
+       SANITIZER
+       ========================================================= */
+
+    function sanitizeObject(value) {
+
+      if (value === null || value === undefined) {
+        return value;
+      }
+
+      if (typeof value === "string") {
+        return sanitizeString(value);
+      }
+
+      if (Array.isArray(value)) {
+        return value.map(item => sanitizeObject(item));
+      }
+
+      if (typeof value === "object") {
+
+        const output = {};
+
+        for (const [key, val] of Object.entries(value)) {
+
+          const lower = key.toLowerCase();
+
+          if (
+            lower === "email" ||
+            lower.includes("email")
+          ) {
+            output[key] = "[hidden]";
+            continue;
+          }
+
+          output[key] = sanitizeObject(val);
+        }
+
+        return output;
+      }
+
+      return value;
+    }
+
+    function sanitizeString(value) {
+
+      if (typeof value !== "string") {
+        return value;
+      }
+
+      return value
+        .replace(
+          /https?:\/\/[^"'\\\s]*\/api\/amsend[^"'\\\s]*/gi,
+          "[hidden]"
+        )
+        .replace(
+          /https?:\/\/[^"'\\\s]*\/api\/amverify[^"'\\\s]*/gi,
+          "[hidden]"
+        );
+    }
+
+    /* =========================================================
+       BUSY / COOLDOWN STATE
+       =========================================================
+
+       Kedua tombol utama (Send & Verify) di-disable bareng
+       selama ada request aktif, biar gak race condition kalau
+       user klak-klik cepat. Send juga dapat cooldown terpisah
+       setelah berhasil, supaya gak dipencet berkali-kali dan
+       bikin server spam-kirim email.
+    ========================================================= */
+
+    let sendOnCooldown = false;
+    let cooldownInterval = null;
+
+    const SEND_BTN_DEFAULT_HTML =
+      '<i class="fa-solid fa-paper-plane"></i> Send';
+
+    function setFormBusy(busy) {
+
+      const sendBtn = document.getElementById("sendBtn");
+      const verifyBtn = document.getElementById("verifyBtn");
+
+      sendBtn.disabled = busy || sendOnCooldown;
+      verifyBtn.disabled = busy;
+
+    }
+
+    function startSendCooldown(seconds) {
+
+      sendOnCooldown = true;
+
+      const btn = document.getElementById("sendBtn");
+
+      let remaining = seconds;
+
+      function tick() {
+
+        btn.disabled = true;
+
+        if (remaining <= 0) {
+
+          clearInterval(cooldownInterval);
+
+          sendOnCooldown = false;
+
+          btn.disabled = false;
+
+          btn.innerHTML = SEND_BTN_DEFAULT_HTML;
+
+          return;
+        }
+
+        btn.innerHTML =
+          '<i class="fa-solid fa-clock"></i> Tunggu ' +
+          remaining +
+          "s";
+
+        remaining--;
+
+      }
+
+      tick();
+
+      cooldownInterval = setInterval(tick, 1000);
+
+    }
+
+    /* =========================================================
+       ERROR MESSAGE HELPER
+       ========================================================= */
+
+    function describeNetworkError(error) {
+
+      if (
+        error instanceof TypeError
+      ) {
+
+        return "Gagal terhubung ke server. Cek koneksi internet kamu.";
+
+      }
+
+      return "Terjadi kesalahan saat memproses request.";
+
+    }
+
+    /* =========================================================
+       SEND VERIFICATION
+    ========================================================= */
+
+    async function sendVerification() {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const status =
+        document.getElementById("status");
+
+      const loading =
+        document.getElementById("loading");
+
+      if (!email) {
+
+        status.textContent =
+          "Email wajib diisi.";
+
+        return;
+      }
+
+      setFormBusy(true);
+
+      loading.classList.remove("hidden");
+
+      status.textContent =
+        "Mengirim link verifikasi...";
+
+      try {
+
+        const url =
+          WEBSITE_ORIGIN +
+          PRIVATE_SEND_PATH +
+          "?email=" +
+          encodeURIComponent(email);
+
+        const response =
+          await fetch(
+            url,
+            {
+              method: "GET",
+              cache: "no-store"
+            }
+          );
+
+        if (response.status === 429) {
+
+          status.textContent =
+            "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.";
+
+          showResult({
+            success: false,
+            message: "Rate limited (HTTP 429)."
+          });
+
+          return;
+
+        }
+
+        const data =
+          await response.json();
+
+        showResult(data);
+
+        if (data.success) {
+
+          status.textContent =
+            "Link verifikasi berhasil dikirim. Cek inbox / folder spam ya.";
+
+          startSendCooldown(45);
+
+        } else {
+
+          status.textContent =
+            data.message ||
+            "Gagal mengirim.";
+
+        }
+
+      } catch (error) {
+
+        status.textContent =
+          describeNetworkError(error);
+
+        showResult({
+          success: false,
+          message: "Request gagal diproses."
+        });
+
+      } finally {
+
+        setFormBusy(false);
+
+        loading.classList.add("hidden");
+
+      }
+    }
+
+    /* =========================================================
+       VERIFY ACCOUNT
+    ========================================================= */
+
+    async function verifyAccount() {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const magicLink =
+        document.getElementById("magicLink").value.trim();
+
+      const status =
+        document.getElementById("status");
+
+      const loading =
+        document.getElementById("loading");
+
+      if (!email) {
+
+        status.textContent =
+          "Email wajib diisi.";
+
+        return;
+      }
+
+      if (!magicLink) {
+
+        status.textContent =
+          "Magic link wajib diisi.";
+
+        return;
+      }
+
+      setFormBusy(true);
+
+      loading.classList.remove("hidden");
+
+      status.textContent =
+        "Memverifikasi...";
+
+      try {
+
+        const url =
+          WEBSITE_ORIGIN +
+          PRIVATE_VERIFY_PATH +
+          "?email=" +
+          encodeURIComponent(email) +
+          "&link=" +
+          encodeURIComponent(magicLink);
+
+        const response =
+          await fetch(
+            url,
+            {
+              method: "GET",
+              cache: "no-store"
+            }
+          );
+
+        if (response.status === 429) {
+
+          status.textContent =
+            "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.";
+
+          showResult({
+            success: false,
+            message: "Rate limited (HTTP 429)."
+          });
+
+          return;
+
+        }
+
+        const data =
+          await response.json();
+
+        showResult(data);
+
+        if (data.success) {
+
+          status.textContent =
+            "Verifikasi berhasil!";
+
+        } else {
+
+          status.textContent =
+            data.message ||
+            "Verifikasi gagal.";
+
+        }
+
+      } catch (error) {
+
+        status.textContent =
+          describeNetworkError(error);
+
+        showResult({
+          success: false,
+          message: "Request gagal diproses."
+        });
+
+      } finally {
+
+        setFormBusy(false);
+
+        loading.classList.add("hidden");
+
+      }
+    }
+
+    /* =========================================================
+       PUBLIC API
+    ========================================================= */
+
+    const PUBLIC_API_ORIGIN =
+      "https://ellreyxml.web.id";
+
+    const PUBLIC_ENDPOINTS = {
+
+      send: {
+        method: "GET",
+        path: "/alight-motion/send"
+      },
+
+      verify: {
+        method: "GET",
+        path: "/alight-motion/verify"
+      }
+
+    };
+
+    let currentApiType = "send";
+
+    function getPublicUrl(type, email, link) {
+
+      const endpoint =
+        PUBLIC_ENDPOINTS[type];
+
+      const url =
+        new URL(
+          endpoint.path,
+          PUBLIC_API_ORIGIN
+        );
+
+      if (email) {
+        url.searchParams.set(
+          "email",
+          email
+        );
+      }
+
+      if (link) {
+        url.searchParams.set(
+          "link",
+          link
+        );
+      }
+
+      return url.toString();
+    }
+
+    /* =========================================================
+       REQUEST.SH
+    ========================================================= */
+
+    function generateRequestSh(type) {
+
+      const endpoint =
+        PUBLIC_ENDPOINTS[type];
+
+      let code = "";
+
+      if (type === "send") {
+
+        code =
+`#!/bin/bash
+
+EMAIL="user@example.com"
+
+curl -G "https://ellreyxml.web.id${endpoint.path}" \\
+  --data-urlencode "email=$EMAIL"`;
+
+      } else {
+
+        code =
+`#!/bin/bash
+
+EMAIL="user@example.com"
+MAGIC_LINK="https://example.com/..."
+
+curl -G "https://ellreyxml.web.id${endpoint.path}" \\
+  --data-urlencode "email=$EMAIL" \\
+  --data-urlencode "link=$MAGIC_LINK"`;
+
+      }
+
+      return code;
+    }
+
+    function showRequest(type) {
+
+      currentApiType = type;
+
+      openTry(type);
+
+      document.getElementById("requestCode").textContent =
+        generateRequestSh(type);
+
+    }
+
+    function copyRequest() {
+
+      const code =
+        document.getElementById("requestCode").textContent;
+
+      if (!code) {
+        return;
+      }
+
+      navigator.clipboard.writeText(code)
+        .then(() => {
+
+          const btn =
+            document.querySelector(".copy-request");
+
+          const original =
+            btn.innerHTML;
+
+          btn.innerHTML =
+            '<i class="fa-solid fa-check"></i> Copied';
+
+          setTimeout(() => {
+            btn.innerHTML = original;
+          }, 1200);
+
+        })
+        .catch(() => {});
+
+    }
+
+    /* =========================================================
+       OPEN TRY PANEL
+    ========================================================= */
+
+    function openTry(type) {
+
+      currentApiType = type;
+
+      const panel =
+        document.getElementById("tryPanel");
+
+      const title =
+        document.getElementById("tryTitle");
+
+      const email =
+        document.getElementById("apiEmail");
+
+      const link =
+        document.getElementById("apiLink");
+
+      const requestCode =
+        document.getElementById("requestCode");
+
+      panel.classList.remove("hidden-panel");
+
+      if (type === "send") {
+
+        title.textContent =
+          "Coba /alight-motion/send";
+
+        email.style.display = "block";
+
+        link.style.display = "none";
+
+      } else {
+
+        title.textContent =
+          "Coba /alight-motion/verify";
+
+        email.style.display = "block";
+
+        link.style.display = "block";
+
+      }
+
+      requestCode.textContent =
+        generateRequestSh(type);
+
+      panel.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+
+    function closeTry() {
+
+      document
+        .getElementById("tryPanel")
+        .classList.add("hidden-panel");
+
+    }
+
+    /* =========================================================
+       EXECUTE PUBLIC API
+    ========================================================= */
+
+    async function executePublicApi() {
+
+      const email =
+        document
+          .getElementById("apiEmail")
+          .value
+          .trim();
+
+      const link =
+        document
+          .getElementById("apiLink")
+          .value
+          .trim();
+
+      const status =
+        document.getElementById("tryStatus");
+
+      const btn =
+        document.getElementById("trySendBtn");
+
+      if (!email) {
+
+        status.textContent =
+          "Email wajib diisi.";
+
+        return;
+      }
+
+      if (
+        currentApiType === "verify" &&
+        !link
+      ) {
+
+        status.textContent =
+          "Magic link wajib diisi.";
+
+        return;
+      }
+
+      btn.disabled = true;
+
+      status.textContent =
+        "Mengirim request...";
+
+      const started =
+        performance.now();
+
+      const publicUrl =
+        getPublicUrl(
+          currentApiType,
+          email,
+          link
+        );
+
+      /*
+       * Public URL is intentionally the only URL
+       * passed into the public API tester/log.
+       */
+
+      const logUrl =
+        getSafePublicLogUrl(
+          currentApiType,
+          email,
+          link
+        );
+
+      let requestData = {};
+
+      if (email) {
+        requestData.email = "[hidden]";
+      }
+
+      if (link) {
+        requestData.link = "[hidden]";
+      }
+
+      let responseData = null;
+
+      let statusCode = 0;
+
+      try {
+
+        const response =
+          await fetch(
+            publicUrl,
+            {
+              method: "GET",
+              cache: "no-store"
+            }
+          );
+
+        statusCode =
+          response.status;
+
+        if (statusCode === 429) {
+
+          responseData = {
+            success: false,
+            message: "Rate limited (HTTP 429)."
+          };
+
+          const duration =
+            Math.round(
+              performance.now() - started
+            );
+
+          addLiveLog({
+            type: currentApiType,
+            method: "GET",
+            url: logUrl,
+            request: requestData,
+            response: responseData,
+            status: statusCode,
+            duration
+          });
+
+          status.textContent =
+            "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.";
+
+          return;
+
+        }
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
+
+        if (
+          contentType.includes("application/json")
+        ) {
+
+          responseData =
+            await response.json();
+
+        } else {
+
+          responseData =
+            await response.text();
+
+        }
+
+        const duration =
+          Math.round(
+            performance.now() - started
+          );
+
+        addLiveLog({
+          type: currentApiType,
+          method: "GET",
+          url: logUrl,
+          request: requestData,
+          response: responseData,
+          status: statusCode,
+          duration
+        });
+
+        status.textContent =
+          "Response diterima: HTTP " +
+          statusCode;
+
+      } catch (error) {
+
+        const duration =
+          Math.round(
+            performance.now() - started
+          );
+
+        /*
+         * Do not expose raw browser error because
+         * some runtime/network errors may contain
+         * implementation details.
+         */
+
+        responseData = {
+          success: false,
+          message: "Request gagal diproses."
+        };
+
+        addLiveLog({
+          type: currentApiType,
+          method: "GET",
+          url: logUrl,
+          request: requestData,
+          response: responseData,
+          status: 0,
+          duration
+        });
+
+        status.textContent =
+          describeNetworkError(error);
+
+      } finally {
+
+        btn.disabled = false;
+
+      }
+    }
+
+    /* =========================================================
+       SAFE PUBLIC LOG URL
+    ========================================================= */
+
+    function getSafePublicLogUrl(
+      type,
+      email,
+      link
+    ) {
+
+      const endpoint =
+        PUBLIC_ENDPOINTS[type];
+
+      const url =
+        new URL(
+          endpoint.path,
+          PUBLIC_API_ORIGIN
+        );
+
+      /*
+       * Email and magic link are intentionally
+       * NOT included in the visible live URL.
+       *
+       * This keeps credentials / personal data
+       * out of the public log.
+       */
+
+      return url.pathname;
+
+    }
+
+    /* =========================================================
+       LIVE LOG
+    ========================================================= */
+
+    function addLiveLog(log) {
+
+      const empty =
+        document.getElementById("emptyLog");
+
+      if (empty) {
+        empty.remove();
+      }
+
+      const body =
+        document.getElementById("liveBody");
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "log-item";
+
+      const safeResponse =
+        sanitizeObject(log.response);
+
+      const safeRequest =
+        sanitizeObject(log.request);
+
+      const responseText =
+        typeof safeResponse === "string"
+          ? safeResponse
+          : JSON.stringify(
+              safeResponse,
+              null,
+              2
+            );
+
+      const requestText =
+        JSON.stringify(
+          safeRequest,
+          null,
+          2
+        );
+
+      item.innerHTML = `
+        <div class="log-meta">
+
+          <span class="log-method">
+            ${escapeHtml(log.method)}
+            / ${escapeHtml(log.type)}
+          </span>
+
+          <span class="log-time">
+            ${escapeHtml(
+              new Date().toLocaleTimeString()
+            )}
+            · ${escapeHtml(
+              String(log.duration)
+            )}ms
+            · HTTP ${escapeHtml(
+              String(log.status)
+            )}
+          </span>
+
+        </div>
+
+        <div class="log-url">
+          ${escapeHtml(log.url)}
+        </div>
+
+        <div class="log-columns">
+
+          <div class="log-block">
+
+            <div class="log-label">
+              Request
+            </div>
+
+            <pre class="log-code">${escapeHtml(
+              requestText
+            )}</pre>
+
+          </div>
+
+          <div class="log-block">
+
+            <div class="log-label">
+              Response
+            </div>
+
+            <pre class="log-code">${escapeHtml(
+              responseText
+            )}</pre>
+
+          </div>
+
+        </div>
+      `;
+
+      body.prepend(item);
+
+      /*
+       * Limit browser-side live history.
+       */
+
+      const logs =
+        body.querySelectorAll(
+          ".log-item"
+        );
+
+      if (logs.length > 20) {
+
+        logs[logs.length - 1].remove();
+
+      }
+
+    }
+
+    function clearLogs() {
+
+      const body =
+        document.getElementById("liveBody");
+
+      body.innerHTML = `
+        <div
+          id="emptyLog"
+          class="empty-log"
+        >
+          Belum ada request publik.<br>
+          Gunakan tombol "Coba Langsung" untuk mengirim request.
+        </div>
+      `;
+
+    }
+
+    /* =========================================================
+       ESCAPE HTML
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+    /* =========================================================
+       UI EFFECTS
+    ========================================================= */
+
+    const spotlightEl =
+      document.getElementById("spotlight");
+
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+
+        spotlightEl.style.setProperty(
+          "--mx",
+          e.clientX + "px"
+        );
+
+        spotlightEl.style.setProperty(
+          "--my",
+          e.clientY + "px"
+        );
+
+      }
+    );
+
+    const progressEl =
+      document.getElementById("progress");
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        const h =
+          document.documentElement;
+
+        const total =
+          h.scrollHeight -
+          h.clientHeight;
+
+        if (total <= 0) {
+          progressEl.style.width = "0%";
+          return;
+        }
+
+        const scrolled =
+          h.scrollTop /
+          total *
+          100;
+
+        progressEl.style.width =
+          scrolled + "%";
+
+      }
+    );
+
+    function addRipple(el) {
+
+      el.addEventListener(
+        "click",
+        function(e) {
+
+          const r =
+            document.createElement("span");
+
+          r.className =
+            "ripple";
+
+          const rect =
+            this.getBoundingClientRect();
+
+          r.style.left =
+            (e.clientX - rect.left) + "px";
+
+          r.style.top =
+            (e.clientY - rect.top) + "px";
+
+          this.appendChild(r);
+
+          setTimeout(
+            () => r.remove(),
+            600
+          );
+
+        }
+      );
+
+    }
+
+    document
+      .querySelectorAll(
+        ".input-wrapper button, .api-button, .try-send"
+      )
+      .forEach(addRipple);
+
+    /* =========================================================
+       INTERSECTION OBSERVER
+    ========================================================= */
+
+    if (
+      "IntersectionObserver"
+      in window
+    ) {
+
+      const revealObserver =
+        new IntersectionObserver(
+          (entries) => {
+
+            entries.forEach(
+              entry => {
+
+                if (
+                  entry.isIntersecting
+                ) {
+
+                  entry.target
+                    .classList
+                    .add("in-view");
+
+                  revealObserver
+                    .unobserve(
+                      entry.target
+                    );
+
+                }
+
+              }
+            );
+
+          },
+          {
+            threshold: 0.15
+          }
+        );
+
+      document
+        .querySelectorAll(".reveal")
+        .forEach(
+          el =>
+            revealObserver.observe(el)
+        );
+
+    } else {
+
+      document
+        .querySelectorAll(".reveal")
+        .forEach(
+          el =>
+            el.classList.add(
+              "in-view"
+            )
+        );
+
+    }
+
+  </script>
+
+</body>
+</html>
