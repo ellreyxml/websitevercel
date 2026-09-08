@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snatch — TikTok Downloader</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+:root{
+  --ink:#0a0a0a;
+  --paper:#f2f1ec;
+  --cyan:#25f4ee;
+  --pink:#fe2c55;
+  --gray:#7a7a76;
+  --line:rgba(242,241,236,0.12);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--ink);
+  color:var(--paper);
+  min-height:100vh;
+  overflow-x:hidden;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:36px 36px;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important;}
+  .reveal{ opacity:1 !important; transform:none !important; }
+}
+
+/* BACK */
+.back{
+  position:fixed;
+  top:18px;
+  left:18px;
+  z-index:9999;
+  padding:9px 16px;
+  border:1px solid var(--line);
+  background:var(--ink);
+  display:flex;
+  gap:8px;
+  align-items:center;
+  text-decoration:none;
+  color:var(--paper);
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  transition:border-color .2s, box-shadow .2s, transform .15s;
+}
+.back:hover{border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 16px rgba(37,244,238,.3);}
+.back:active{transform:scale(.96);}
+
+/* HERO / SIGNATURE TITLE */
+.hero{
+  text-align:center;
+  padding:90px 20px 30px;
+}
+
+.wordmark{
+  position:relative;
+  display:inline-block;
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(38px,8vw,64px);
+  letter-spacing:-0.02em;
+  line-height:1;
+  color:var(--paper);
+}
+
+.wordmark span{
+  position:relative;
+  display:inline-block;
+}
+
+.wordmark::before,
+.wordmark::after{
+  content:"SNATCH.";
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  z-index:-1;
+  animation:glitchShift 4s ease-in-out infinite;
+}
+
+.wordmark::before{ color:var(--cyan); transform:translate(3px,2px); opacity:.8; animation-delay:0s; }
+.wordmark::after{ color:var(--pink); transform:translate(-3px,-2px); opacity:.8; animation-delay:-2s; }
+
+@keyframes glitchShift{
+  0%,100%{ transform:translate(3px,2px); }
+  50%{ transform:translate(-2px,3px); }
+}
+
+.tagline{
+  margin-top:14px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gray);
+}
+
+/* CURSOR SPOTLIGHT */
+.spotlight{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:radial-gradient(600px circle at var(--mx,50%) var(--my,20%), rgba(37,244,238,.06), transparent 40%);
+  transition:background .1s ease-out;
+}
+
+/* SCROLL PROGRESS */
+.progress{
+  position:fixed;
+  top:0; left:0;
+  height:3px;
+  width:0%;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));
+  z-index:10000;
+  transition:width .1s linear;
+}
+
+/* MARQUEE */
+.marquee{
+  overflow:hidden;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:10px 0;
+  margin-top:36px;
+  white-space:nowrap;
+}
+.marquee-track{
+  display:inline-flex;
+  gap:14px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  color:var(--gray);
+  animation:marquee 18s linear infinite;
+}
+.marquee-track span:nth-child(3n+2){ color:var(--cyan); }
+.marquee-track span:nth-child(3n+3){ color:var(--pink); }
+
+@keyframes marquee{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+.box{
+  max-width:460px;
+  margin:0 auto 60px;
+  padding:26px;
+  background:#111111;
+  border:1px solid var(--line);
+  position:relative;
+  isolation:isolate;
+}
+
+.box::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  z-index:-1;
+  background:conic-gradient(from var(--angle,0deg), transparent 0 65%, var(--cyan), var(--pink), transparent 85% 100%);
+  animation:spin 6s linear infinite;
+  opacity:.55;
+}
+
+@property --angle{
+  syntax:'<angle>';
+  initial-value:0deg;
+  inherits:false;
+}
+
+@keyframes spin{
+  from{ --angle:0deg; }
+  to{ --angle:360deg; }
+}
+
+.box::before{
+  content:"01 / PASTE";
+  position:absolute;
+  top:-11px;
+  left:20px;
+  background:var(--ink);
+  padding:0 8px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  color:var(--gray);
+  z-index:2;
+}
+
+.input{
+  width:100%;
+  padding:14px;
+  border:1px solid var(--line);
+  background:var(--ink);
+  color:var(--paper);
+  margin-bottom:12px;
+  outline:none;
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.input:focus{border-color:var(--cyan); box-shadow:0 0 18px rgba(37,244,238,.25);}
+.input::placeholder{color:var(--gray);}
+
+.btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Space Mono',monospace;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  font-size:13px;
+  cursor:pointer;
+  transition:background .15s, color .15s, box-shadow .25s, transform .1s;
+  position:relative;
+  overflow:hidden;
+}
+.btn:hover{background:var(--cyan); box-shadow:0 0 24px rgba(37,244,238,.45);}
+.btn:active{transform:scale(.97);}
+.btn:focus-visible, .action-btn:focus-visible, .arrow:focus-visible, .back:focus-visible{
+  outline:2px solid var(--cyan);
+  outline-offset:2px;
+}
+
+.loading,.error{
+  text-align:center;
+  margin-top:12px;
+  display:none;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+}
+.loading{color:var(--cyan);}
+.error{color:var(--pink);}
+
+.card{
+  margin-top:24px;
+  display:none;
+}
+.card::before{
+  content:"02 / RESULT";
+  display:block;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  color:var(--gray);
+  margin-bottom:10px;
+}
+
+.info{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  border:1px solid var(--line);
+  padding:12px;
+}
+
+.avatar{
+  width:44px;
+  height:44px;
+  object-fit:cover;
+  border:1px solid var(--cyan);
+}
+
+.user h4{font-size:14px; font-weight:600;}
+.user p{font-size:11px; color:var(--gray); font-family:'Space Mono',monospace; margin-top:2px;}
+
+.caption{
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.5;
+  color:#cfcfc9;
+  border:1px solid var(--line);
+  padding:12px;
+}
+
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--gray);
+  border-top:1px dashed var(--line);
+  padding-top:10px;
+}
+.stats span{color:var(--paper);}
+
+video{
+  width:100%;
+  margin-top:15px;
+  display:none;
+  border:1px solid var(--line);
+}
+
+.slider{
+  display:none;
+  margin-top:15px;
+  position:relative;
+  justify-content:center;
+  align-items:center;
+}
+.slider img{ width:100%; display:none; border:1px solid var(--line); }
+.slider img.active{ display:block; }
+
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:var(--ink);
+  border:1px solid var(--line);
+  color:var(--paper);
+  font-size:15px;
+  padding:9px 12px;
+  cursor:pointer;
+  z-index:10;
+  transition:border-color .15s, color .15s, box-shadow .2s;
+}
+.arrow:hover{border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 16px rgba(37,244,238,.35);}
+.arrow.left{left:8px;}
+.arrow.right{right:8px;}
+
+.actions{
+  margin-top:15px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.action-btn{
+  padding:12px 14px;
+  border:1px solid var(--line);
+  cursor:pointer;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  display:flex;
+  justify-content:space-between;
+  color:var(--paper);
+  transition:border-color .15s, color .15s, box-shadow .2s, transform .1s;
+  position:relative;
+  overflow:hidden;
+}
+.action-btn:hover{ border-color:var(--pink); color:var(--pink); box-shadow:0 0 18px rgba(254,44,85,.25); transform:translateX(2px); }
+.action-btn:active{ transform:scale(.98); }
+
+.ripple{
+  position:absolute;
+  width:10px; height:10px;
+  border-radius:50%;
+  background:rgba(37,244,238,.5);
+  transform:translate(-50%,-50%) scale(0);
+  animation:rippleAnim .6s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes rippleAnim{
+  to{ transform:translate(-50%,-50%) scale(22); opacity:0; }
+}
+
+.action-btn span{ color:var(--gray); }
+
+footer{
+  text-align:center;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--gray);
+  padding:40px 20px;
+  letter-spacing:.05em;
+}
+
+/* SCROLL REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+.section{
+  max-width:720px;
+  margin:0 auto;
+  padding:60px 24px;
+  border-top:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+}
+
+.section::before{
+  content:attr(data-num);
+  position:absolute;
+  top:20px;
+  right:10px;
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(90px,18vw,180px);
+  color:transparent;
+  -webkit-text-stroke:1px var(--line);
+  line-height:1;
+  z-index:0;
+  pointer-events:none;
+  user-select:none;
+}
+
+.eyebrow, .sec-title, .steps, .grid, .faq{
+  position:relative;
+  z-index:1;
+}
+
+.eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--cyan);
+  margin-bottom:10px;
+}
+
+.sec-title{
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(24px,4vw,32px);
+  margin-bottom:36px;
+  max-width:460px;
+}
+
+/* steps */
+.steps{
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+}
+
+.step{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+  transition:opacity .7s ease, transform .7s ease;
+}
+.step:nth-child(1){ transition-delay:0s; }
+.step:nth-child(2){ transition-delay:.12s; }
+.step:nth-child(3){ transition-delay:.24s; }
+
+.step-no{
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  color:var(--pink);
+  border:1px solid var(--line);
+  padding:4px 8px;
+  flex-shrink:0;
+  transition:box-shadow .25s, border-color .25s;
+}
+.step:hover .step-no{
+  border-color:var(--pink);
+  box-shadow:0 0 16px rgba(254,44,85,.35);
+}
+
+.step h3{ font-size:15px; margin-bottom:6px; }
+.step p{ font-size:13px; color:#cfcfc9; line-height:1.5; max-width:420px; }
+
+/* features grid */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.feat{
+  border:1px solid var(--line);
+  padding:18px;
+  transition:opacity .7s ease, transform .3s ease, border-color .2s, box-shadow .25s;
+}
+.feat:nth-child(1){ transition-delay:0s; }
+.feat:nth-child(2){ transition-delay:.1s; }
+.feat:nth-child(3){ transition-delay:.2s; }
+.feat:nth-child(4){ transition-delay:.3s; }
+.feat:hover{
+  border-color:var(--cyan);
+  box-shadow:0 0 26px rgba(37,244,238,.15);
+  transform:translateY(-4px) scale(1.02);
+}
+
+.feat i{
+  color:var(--cyan);
+  font-size:16px;
+  margin-bottom:12px;
+  display:block;
+}
+
+.feat h3{ font-size:14px; margin-bottom:6px; }
+.feat p{ font-size:12px; color:#a5a5a0; line-height:1.5; }
+
+@media (max-width:480px){
+  .grid{ grid-template-columns:1fr; }
+}
+
+/* faq */
+.faq{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.faq details{
+  border:1px solid var(--line);
+  padding:16px 18px;
+  transition:border-color .2s, box-shadow .25s;
+}
+.faq details:hover{ border-color:var(--pink); box-shadow:0 0 20px rgba(254,44,85,.12); }
+
+.faq summary{
+  cursor:pointer;
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  list-style:none;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.faq summary::-webkit-details-marker{ display:none; }
+
+.faq summary::after{
+  content:"+";
+  color:var(--pink);
+  font-size:16px;
+}
+
+.faq details[open] summary::after{ content:"–"; }
+
+.faq p{
+  margin-top:12px;
+  font-size:13px;
+  color:#cfcfc9;
+  line-height:1.5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="spotlight" id="spotlight"></div>
+<div class="progress" id="progress"></div>
+
+<a class="back" href="/index.html">
+<i class="fa-solid fa-arrow-left"></i> Back
+</a>
+
+<div class="hero">
+  <h1 class="wordmark"><span>SNATCH.</span></h1>
+  <p class="tagline">Paste a link. Pull the file. No app required.</p>
+</div>
+
+<div class="marquee">
+<div class="marquee-track">
+<span>NO WATERMARK</span><span>·</span><span>FREE FOREVER</span><span>·</span><span>MP3 EXTRACT</span><span>·</span><span>SLIDE PHOTOS</span><span>·</span><span>NO WATERMARK</span><span>·</span><span>FREE FOREVER</span><span>·</span><span>MP3 EXTRACT</span><span>·</span><span>SLIDE PHOTOS</span><span>·</span>
+</div>
+</div>
+
+<div class="box">
+
+<input class="input" id="url" placeholder="https://www.tiktok.com/@user/video/...">
+<button class="btn" onclick="getData()">Fetch download</button>
+
+<div class="loading" id="loading">Reading link…</div>
+<div class="error" id="error"></div>
+
+<div class="card" id="card">
+
+<div class="info">
+<img id="ava" class="avatar">
+<div class="user">
+<h4 id="author">Creator</h4>
+<p id="music">Music</p>
+</div>
+</div>
+
+<div class="caption" id="desc"></div>
+
+<div class="stats">
+<span id="like">❤ 0</span>
+<span id="comment">💬 0</span>
+<span id="share">↻ 0</span>
+</div>
+
+<video id="video" controls></video>
+
+<div class="slider" id="slider">
+<button class="arrow left" onclick="prevImg()"><i class="fa fa-chevron-left"></i></button>
+<button class="arrow right" onclick="nextImg()"><i class="fa fa-chevron-right"></i></button>
+</div>
+
+<div class="actions">
+<div class="action-btn" id="hd">HD download <span>mp4</span></div>
+<div class="action-btn" id="nohd">Standard download <span>mp4</span></div>
+<div class="action-btn" id="mp3">Extract audio <span>mp3</span></div>
+</div>
+
+</div>
+
+</div>
+
+<section class="section reveal" data-num="01">
+<p class="eyebrow">03 / HOW IT WORKS</p>
+<h2 class="sec-title">Tiga langkah, tanpa app.</h2>
+
+<div class="steps">
+
+<div class="step reveal">
+<span class="step-no">01</span>
+<div>
+<h3>Salin link</h3>
+<p>Buka video TikTok yang mau di-save, tekan Share, lalu pilih Copy Link.</p>
+</div>
+</div>
+
+<div class="step reveal">
+<span class="step-no">02</span>
+<div>
+<h3>Tempel di sini</h3>
+<p>Paste link-nya ke kolom di atas, lalu klik Fetch download.</p>
+</div>
+</div>
+
+<div class="step reveal">
+<span class="step-no">03</span>
+<div>
+<h3>Pilih format</h3>
+<p>Simpan sebagai MP4 tanpa watermark, versi normal, atau audio MP3 saja.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section reveal" data-num="02">
+<p class="eyebrow">04 / FEATURES</p>
+<h2 class="sec-title">Kenapa pakai Snatch.</h2>
+
+<div class="grid">
+
+<div class="feat reveal">
+<i class="fa-solid fa-droplet-slash"></i>
+<h3>Tanpa watermark</h3>
+<p>Hasil download bersih, tanpa logo TikTok yang menempel di video.</p>
+</div>
+
+<div class="feat reveal">
+<i class="fa-solid fa-music"></i>
+<h3>Ambil audio</h3>
+<p>Butuh sound-nya doang? Extract langsung ke file MP3.</p>
+</div>
+
+<div class="feat reveal">
+<i class="fa-solid fa-images"></i>
+<h3>Dukung slide foto</h3>
+<p>Post carousel/gambar juga bisa diunduh satu per satu.</p>
+</div>
+
+<div class="feat reveal">
+<i class="fa-solid fa-bolt"></i>
+<h3>Cepat & ringan</h3>
+<p>Nggak perlu install aplikasi, cukup buka di browser.</p>
+</div>
+
+</div>
+</section>
+
+<section class="section reveal" data-num="03">
+<p class="eyebrow">05 / FAQ</p>
+<h2 class="sec-title">Pertanyaan umum.</h2>
+
+<div class="faq">
+
+<details>
+<summary>Apakah ini gratis?</summary>
+<p>Ya, sepenuhnya gratis dan tidak ada batas jumlah download.</p>
+</details>
+
+<details>
+<summary>Video private bisa di-download?</summary>
+<p>Tidak. Snatch hanya bisa memproses video yang publik/bisa diakses lewat link biasa.</p>
+</details>
+
+<details>
+<summary>Kenapa link saya gagal diproses?</summary>
+<p>Pastikan link yang di-paste adalah link video TikTok yang valid dan videonya masih tersedia (tidak dihapus/private).</p>
+</details>
+
+<details>
+<summary>Apakah data saya disimpan?</summary>
+<p>Tidak. Link hanya dipakai sekali untuk mengambil file, tidak ada history yang disimpan di server.</p>
+</details>
+
+</div>
+</section>
+
+<footer>NOT AFFILIATED WITH TIKTOK — FOR PERSONAL USE ONLY</footer>
+
+<script>
+
+/* CLEAN */
+function cleanText(text=""){
+return text.replace(/https?:\/\/\S+/g,"").replace(/v16-\S+/g,"").trim()
+}
+
+/* animate a stat number counting up */
+function countUp(id,prefix,target){
+let el=document.getElementById(id)
+let start=0
+let duration=700
+let startTime=null
+target=Number(target)||0
+
+function step(ts){
+if(!startTime) startTime=ts
+let progress=Math.min((ts-startTime)/duration,1)
+let value=Math.floor(progress*target)
+el.innerText=prefix+value.toLocaleString()
+if(progress<1) requestAnimationFrame(step)
+else el.innerText=prefix+target.toLocaleString()
+}
+requestAnimationFrame(step)
+}
+
+/* cursor spotlight */
+const spotlight=document.getElementById("spotlight")
+window.addEventListener("pointermove",(e)=>{
+spotlight.style.setProperty("--mx", e.clientX+"px")
+spotlight.style.setProperty("--my", e.clientY+"px")
+})
+
+/* scroll progress bar */
+const progress=document.getElementById("progress")
+window.addEventListener("scroll",()=>{
+let h=document.documentElement
+let scrolled=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100
+progress.style.width=scrolled+"%"
+})
+
+/* button ripple */
+function addRipple(el){
+el.addEventListener("click",function(e){
+let r=document.createElement("span")
+r.className="ripple"
+let rect=this.getBoundingClientRect()
+r.style.left=(e.clientX-rect.left)+"px"
+r.style.top=(e.clientY-rect.top)+"px"
+this.appendChild(r)
+setTimeout(()=>r.remove(),600)
+})
+}
+document.querySelectorAll(".btn, .action-btn").forEach(addRipple)
+
+/* scroll reveal */
+if("IntersectionObserver" in window){
+const revealObserver=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("in-view")
+revealObserver.unobserve(entry.target)
+}
+})
+},{ threshold:0.15 })
+
+document.querySelectorAll(".reveal").forEach(el=>revealObserver.observe(el))
+}else{
+document.querySelectorAll(".reveal").forEach(el=>el.classList.add("in-view"))
+}
+
+/* slider logic */
+let images=[]
+let index=0
+
+function showImg(){
+document.querySelectorAll("#slider img").forEach((img,i)=>{
+img.classList.remove("active")
+if(i===index) img.classList.add("active")
+})
+}
+
+function nextImg(){
+if(index < images.length-1){
+index++
+showImg()
+updateDownload()
+}
+}
+
+function prevImg(){
+if(index > 0){
+index--
+showImg()
+updateDownload()
+}
+}
+
+function updateDownload(){
+document.getElementById("hd").onclick=()=>window.open(images[index])
+document.getElementById("nohd").onclick=()=>window.open(images[index])
+}
+
+/* API */
+async function getData(){
+
+let url=document.getElementById("url").value
+let loading=document.getElementById("loading")
+let error=document.getElementById("error")
+let card=document.getElementById("card")
+
+card.style.display="none"
+error.style.display="none"
+loading.style.display="block"
+
+try{
+
+let res=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`)
+let data=await res.json()
+
+loading.style.display="none"
+
+if(!data.data){
+error.style.display="block"
+error.innerText="Gagal ambil data"
+return
+}
+
+card.style.display="block"
+
+/* info */
+document.getElementById("author").innerText=data.data.author?.nickname||"Unknown"
+document.getElementById("desc").innerText=cleanText(data.data.title)||"No caption"
+document.getElementById("music").innerText=cleanText(data.data.music)||"Original sound"
+
+countUp("like","❤ ",data.data.digg_count||0)
+countUp("comment","💬 ",data.data.comment_count||0)
+countUp("share","↻ ",data.data.share_count||0)
+
+document.getElementById("ava").src=data.data.author?.avatar||""
+
+/* media */
+let video=document.getElementById("video")
+let slider=document.getElementById("slider")
+
+video.style.display="none"
+slider.style.display="none"
+slider.innerHTML=""
+
+images=[]
+index=0
+
+if(data.data.images){
+
+slider.style.display="flex"
+images=data.data.images
+
+images.forEach((i,idx)=>{
+let img=document.createElement("img")
+img.src=i
+if(idx===0) img.classList.add("active")
+slider.appendChild(img)
+})
+
+updateDownload()
+
+}else{
+
+video.style.display="block"
+video.src=data.data.play
+
+images=[data.data.play]
+updateDownload()
+
+}
+
+/* mp3 */
+document.getElementById("mp3").onclick=()=>{
+window.open(data.data.music)
+}
+
+showImg()
+
+}catch(e){
+loading.style.display="none"
+error.style.display="block"
+error.innerText="Error / link invalid"
+}
+
+}
+
+</script>
+
+</body>
+</html>
